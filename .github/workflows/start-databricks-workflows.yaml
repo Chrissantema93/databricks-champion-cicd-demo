@@ -1,0 +1,17 @@
+name: Run shell command on development branch
+
+on:
+  push:
+    branches:
+      - development
+
+jobs:
+  shell_command:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Run shell command
+      run: echo "Replace this with your shell command"
