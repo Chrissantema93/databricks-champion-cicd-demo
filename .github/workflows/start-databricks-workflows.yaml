@@ -1,6 +1,7 @@
 name: Run shell command on development branch
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - development

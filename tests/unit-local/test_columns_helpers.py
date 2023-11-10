@@ -3,7 +3,7 @@ from pyspark.sql import SparkSession
 
 from helpers.columns_helpers import *
 
-
+#what does this even
 def test_columns_except(spark_session: SparkSession):
     original_df = spark_session.createDataFrame(
         [[1, 2, 3, 4]], schema="col1 int, col2 int, col3 int, col4 int")
