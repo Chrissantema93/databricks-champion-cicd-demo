@@ -26,14 +26,14 @@ jobs:
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_PAT }}
         run: |
           branch_name=${{ github.ref_name }}
-          repo_url=${{vars.REPO_URL}}
-          unit_test_job_id=${{vars.UNIT_TEST_JOB_ID}}
+          repo_url=${{ secrets.REPO_URL }}
+          unit_test_job_id=${{ secrets.UNIT_TEST_JOB_ID }}
           git_provider="github"
-          
+
           tasks=()
           for notebook in tests/unit-notebooks/*; do
             notebook_path="${notebook}"
-            task_key="unit_test_$(basename $notebook)"
+            task_key="unit_test_$(basename -s .py $notebook)"
             tasks+=("{\"notebook_task\": {\"notebook_path\": \"$notebook_path\"}, \"task_key\": \"$task_key\"}")
           done
 
