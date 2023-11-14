@@ -27,7 +27,7 @@ jobs:
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_PAT }}
         run: |
           branch_name=${{ github.ref_name }}
-          repo_url=${{github.repositoryUrl}}
+          repo_url=${{vars.REPO_URL}}
           job_id=${{vars.JOB_ID}}
           # Replace 'JOB_ID' with the actual Job ID and ensure the JSON is correctly formatted for your job
           job_update_json="{\"job_id\": $job_id, \"new_settings\": {\"git_source\": {\"git_url\": \"$repo_url\", \"branch\": \"$branch_name\"}}}"
