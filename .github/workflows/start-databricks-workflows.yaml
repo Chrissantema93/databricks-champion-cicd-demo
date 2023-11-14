@@ -18,8 +18,8 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
 
-      # - name: install-databricks-cli
-      #   uses: microsoft/install-databricks-cli@v2.1.0
+      - name: install-databricks-cli
+        uses: databricks/setup-cli@main
     
       - name: update Databricks Job
         env:
