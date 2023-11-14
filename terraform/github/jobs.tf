@@ -1,11 +1,15 @@
 resource "databricks_job" "test" {
   name                = "DLT CICD"
   max_concurrent_runs = 1
-
   # job schedule
   schedule {
     quartz_cron_expression = "0 0 0 ? 1/1 * *" # cron schedule of job
     timezone_id            = "UTC"
+  }
+
+  git_source {
+    url =  var.github_url
+    branch =  "development"
   }
 
     task {
