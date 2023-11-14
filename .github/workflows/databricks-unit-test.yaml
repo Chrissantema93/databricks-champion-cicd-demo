@@ -40,5 +40,5 @@ jobs:
 
           tasks_string=$(IFS=','; echo "${tasks[*]}")
 
-          job_reset_json="{\"job_id\": $unit_test_job_id, \"new_settings\": {\"tasks\": [$tasks_string], \"git_source\": {\"git_provider\" : \"$git_provider\", \"git_url\": \"$repo_url\", \"git_branch\": \"$branch_name\"}}}"
+          job_reset_json="{\"job_id\": $unit_test_job_id, \"new_settings\": {\"name\": "Unit Tests", \"tasks\": [$tasks_string], \"git_source\": {\"git_provider\" : \"$git_provider\", \"git_url\": \"$repo_url\", \"git_branch\": \"$branch_name\"}}}"
           databricks jobs reset --json "$job_reset_json"
