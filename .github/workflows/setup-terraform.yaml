@@ -2,6 +2,14 @@ name: Terraform Workflow
 
 on:
   workflow_dispatch:
+   inputs:
+      action:
+        type: choice
+        description: 'Terraform action to perform: apply or destroy'
+        required: true
+        options:
+          - apply
+          - destroy
     
 jobs:
   terraform:
@@ -24,6 +32,14 @@ jobs:
             DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
             DATABRICKS_PAT: ${{ secrets.DATABRICKS_PAT }}
             GITHUB_PAT: ${{ secrets.GITHUB_PAT }}
-        run: terraform apply -auto-approve
+        run: |
+          if [[ "${{ github.event.inputs.action }}" == "apply" ]]; then
+            terraform apply -auto-approve
+          elif [[ "${{ github.event.inputs.action }}" == "destroy" ]]; then
+            terraform destroy -auto-approve
+          else
+            echo "Invalid action specified"
+            exit 1
+          fi
 
 
