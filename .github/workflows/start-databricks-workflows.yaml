@@ -1,17 +1,31 @@
-name: Run shell command on development branch
+name: Branch Information
 
 on:
   push:
     branches:
-      - development
+      - 'development'
+      - 'release/*'
 
 jobs:
-  shell_command:
+  development_branch_info:
+    if: github.ref == 'refs/heads/development'
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Check out code
+        uses: actions/checkout@v2
 
-    - name: Run shell command
-      run: echo "Replace this with your shell command"
+      - name: Echo Development Branch Name
+        run: |
+          echo "Development Branch Pushed: ${{ github.ref_name }}"
+
+  release_branch_info:
+    if: startsWith(github.ref, 'refs/heads/release/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Echo Release Branch Name and Current Time
+        run: |
+          echo "Release Branch Pushed: ${{ github.ref_name }}"
+          echo "Current Time: $(date -u)"

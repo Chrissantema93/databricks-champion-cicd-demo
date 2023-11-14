@@ -19,15 +19,18 @@ resource "databricks_job" "test" {
 
   # Create blocks for Tasks here #
   task {
-    task_key = "test" # this task depends on nothing
+    task_key = "pipeline" 
+    depends_on {
+      task_key = "unit_tests"
+    }
     pipeline_task {
       pipeline_id = databricks_pipeline.databricks_champion_pipeline.id
     }
   }
   task {
-    task_key = "test2"
+    task_key = "pipeline_test"
     depends_on {
-      task_key = "test"
+      task_key = "pipeline"
     }
     pipeline_task {
       pipeline_id = databricks_pipeline.databricks_champion_pipeline_test.id
