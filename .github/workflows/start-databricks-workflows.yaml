@@ -4,9 +4,8 @@ on:
 
   workflow_dispatch:
   push:
-    branches:
-      - 'development'
-      - 'release/*'
+    branches-ignore:
+      - 'main'
     paths-ignore:
       - 'terraform/**'
       - '.github/**'
@@ -19,16 +18,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Set up Databricks CLI
+      - name: install-databricks-cli
+        uses: microsoft/install-databricks-cli@v1.0.0
+    
+      - name: update Databricks Job
         env:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_PAT }}
-        run: |
-          pip install --upgrade databricks-cli
-
-      - name: update Databricks Job
         run: |
           echo "Patching Databricks Job..."
           branch_name=${GITHUB_REF#refs/heads/}
@@ -46,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Echo Release Branch Name and Current Time
         run: |
