@@ -5,7 +5,7 @@ resource "databricks_pipeline" "databricks_champion_pipeline" {
 
   cluster {
     node_type_id            = data.databricks_node_type.smallest.id
-    num_workers = 1
+    num_workers = 0
     spark_conf = {
       # Single-node
       "spark.databricks.cluster.profile" : "singleNode"
@@ -27,7 +27,7 @@ resource "databricks_pipeline" "databricks_champion_pipeline_test" {
 
   cluster {
     node_type_id            = data.databricks_node_type.smallest.id
-    num_workers = 1
+    num_workers = 0
     spark_conf = {
       # Single-node
       "spark.databricks.cluster.profile" : "singleNode"
