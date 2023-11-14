@@ -5,6 +5,7 @@ resource "databricks_pipeline" "databricks_champion_pipeline" {
 
   cluster {
     label = "default"
+    node_type_id = "Standard_DS3_v2"
     autoscale {
       min_workers = 0
       max_workers = 1
@@ -27,6 +28,7 @@ resource "databricks_pipeline" "databricks_champion_pipeline_test" {
 
   cluster {
     label = "default"
+    node_type_id = "Standard_DS3_v2"
     autoscale {
       min_workers = 0
       max_workers = 1
