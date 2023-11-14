@@ -1,17 +1,21 @@
 resource "databricks_job" "test" {
   name                = "DLT CICD"
   max_concurrent_runs = 1
-
   # job schedule
   schedule {
     quartz_cron_expression = "0 0 0 ? 1/1 * *" # cron schedule of job
     timezone_id            = "UTC"
   }
 
+  git_source {
+    url =  var.github_url
+    branch =  "development"
+  }
+
     task {
         task_key = "unit_tests"
     notebook_task {
-      notebook_path = "${databricks_repo.databricks_champion_repo.path}/tests/unit-notebooks/test_column_helpers.py"
+      notebook_path = "tests/unit-notebooks/test_column_helpers.py"
     }
     existing_cluster_id = databricks_cluster.dlt_files_in_repos_testing.id
     }
