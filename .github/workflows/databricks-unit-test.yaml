@@ -34,7 +34,8 @@ jobs:
           tasks=()
           for notebook in tests/unit-notebooks/*; do
             notebook_path="${notebook}"
-            tasks+=("{\"notebook_task\": {\"notebook_path\": \"$notebook_path\"}}")
+            task_key="unit_test_$(basename $notebook)"
+            tasks+=("{\"notebook_task\": {\"notebook_path\": \"$notebook_path\"}, \"task_key\": \"$task_key\"}")
           done
 
           tasks_string=$(IFS=','; echo "${tasks[*]}")
