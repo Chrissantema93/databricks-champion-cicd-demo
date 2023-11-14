@@ -4,15 +4,13 @@ resource "databricks_pipeline" "databricks_champion_pipeline" {
 
 
   cluster {
-    num_workers = 0
+    node_type_id            = data.databricks_node_type.smallest.id
+    num_workers = 1
     spark_conf = {
       # Single-node
       "spark.databricks.cluster.profile" : "singleNode"
       "spark.master" : "local[*]"
     }
-    custom_tags = {
-    "ResourceClass" = "SingleNode"
-  }
   }
   library {
     notebook {
@@ -28,15 +26,13 @@ resource "databricks_pipeline" "databricks_champion_pipeline_test" {
   storage = "/test/first-pipeline"
 
   cluster {
-    num_workers = 0
+    node_type_id            = data.databricks_node_type.smallest.id
+    num_workers = 1
     spark_conf = {
       # Single-node
       "spark.databricks.cluster.profile" : "singleNode"
       "spark.master" : "local[*]"
     }
-    custom_tags = {
-    "ResourceClass" = "SingleNode"
-  }
   }
 
   library {
