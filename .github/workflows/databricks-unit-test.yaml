@@ -28,13 +28,14 @@ jobs:
           branch_name=${{ github.ref_name }}
           repo_url=${{ vars.REPO_URL }}
           unit_test_job_id=${{ vars.UNIT_TEST_JOB_ID }}
+          existing_cluster_id=${{ vars.DATABRICKS.EXISTING_CLUSTER_ID }}
           git_provider="github"
 
           tasks=()
           for notebook in tests/unit-notebooks/*; do
             notebook_path="${notebook}"
             task_key="unit_test_$(basename -s .py $notebook)"
-            tasks+=("{\"notebook_task\": {\"notebook_path\": \"$notebook_path\"}, \"task_key\": \"$task_key\"}")
+            tasks+=("{\"notebook_task\": {\"notebook_path\": \"$notebook_path\"}, \"task_key\": \"$task_key\", \"existing_cluster_id\": \"$existing_cluster_id\"}")
           done
 
           tasks_string=$(IFS=','; echo "${tasks[*]}")
