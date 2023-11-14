@@ -2,14 +2,21 @@ name: Terraform Workflow
 
 on:
   workflow_dispatch:
+   inputs:
+      action:
+        type: choice
+        description: 'Terraform action to perform: apply or destroy'
+        required: true
+        options:
+          - apply
+          - destroy
     
-
 jobs:
   terraform:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v1
@@ -21,30 +28,18 @@ jobs:
         run: terraform init
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve
-
-      - name: Extract Databricks Job ID
-        id: extract_job_id
-        run: |
-          job_id=$(terraform output -raw databricks_job_id)
-          echo "DATABRICKS_JOB_ID=$job_id" >> $GITHUB_ENV
-
-      - name: Save Databricks Job ID to GitHub Secrets
-        uses: actions/github-script@v5
-        with:
-          script: |
-            const jobId = process.env.DATABRICKS_JOB_ID;
-            const secretName = 'DATABRICKS_JOB_ID';
-            const repository = context.repo.owner + '/' + context.repo.repo;
-            const token = process.env.GITHUB_TOKEN;
-            
-            const octokit = github.getOctokit(token);
-            await octokit.rest.actions.createOrUpdateRepoSecret({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              secret_name: secretName,
-              encrypted_value: jobId
-            });
-
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+            DATABRICKS_PAT: ${{ secrets.DATABRICKS_PAT }}
+            GITHUB_PAT: ${{ secrets.GITHUB_PAT }}
+        run: |
+          if [[ "${{ github.event.inputs.action }}" == "apply" ]]; then
+            terraform apply -auto-approve
+          elif [[ "${{ github.event.inputs.action }}" == "destroy" ]]; then
+            terraform destroy -auto-approve
+          else
+            echo "Invalid action specified"
+            exit 1
+          fi
+
+
