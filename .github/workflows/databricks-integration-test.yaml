@@ -36,5 +36,5 @@ jobs:
             databricks jobs run-now $job_id
           }
 
-          update_and_run_job ${{ secrets.UNIT_TEST_JOB_ID }}
-          update_and_run_job ${{ secrets.INTEGRATION_TEST_JOB_ID }}
+          update_and_run_job ${{ vars.UNIT_TEST_JOB_ID }}
+          update_and_run_job ${{ vars.INTEGRATION_TEST_JOB_ID }}
