@@ -26,7 +26,7 @@ jobs:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_PAT }}
         run: |
-          branch_name=${GITHUB_REF#refs/heads/}
+          branch_name=${{ github.head_ref }
           job_id=${{vars.JOB_ID}}
           # Replace 'JOB_ID' with the actual Job ID and ensure the JSON is correctly formatted for your job
           job_update_json="{\"job_id\": $job_id, \"new_settings\": {\"git_source\": { \"branch\": \"$branch_name\"}}}"
@@ -34,4 +34,4 @@ jobs:
 
       - name: Echo Development Branch Name
         run: |
-          echo "Development Branch Pushed: ${GITHUB_REF#refs/heads/}"
+          echo "Development Branch Pushed: ${{ github.head_ref }
