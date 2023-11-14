@@ -4,8 +4,12 @@ resource "databricks_pipeline" "databricks_champion_pipeline" {
 
 
   cluster {
-    node_type_id            = data.databricks_node_type.smallest.id
-    num_workers = 1
+    label = "default"
+    autoscale {
+      min_workers = 0
+      max_workers = 1
+      mode = "ENHANCED"
+    }
   }
   library {
     notebook {
@@ -14,6 +18,7 @@ resource "databricks_pipeline" "databricks_champion_pipeline" {
   }
   continuous = false
   development = true
+
 }
 
 resource "databricks_pipeline" "databricks_champion_pipeline_test" {
@@ -21,8 +26,12 @@ resource "databricks_pipeline" "databricks_champion_pipeline_test" {
   storage = "/test/first-pipeline"
 
   cluster {
-    node_type_id            = data.databricks_node_type.smallest.id
-    num_workers = 1
+    label = "default"
+    autoscale {
+      min_workers = 0
+      max_workers = 1
+      mode = "ENHANCED"
+    }
   }
 
   library {
@@ -32,6 +41,7 @@ resource "databricks_pipeline" "databricks_champion_pipeline_test" {
   }
   continuous = false
   development = true
+
 
   configuration = {
     "my_etl.data_path" = "/databricks-datasets/wikipedia-datasets/data-001/clickstream/raw-uncompressed-json/2015_2_clickstream.json"
