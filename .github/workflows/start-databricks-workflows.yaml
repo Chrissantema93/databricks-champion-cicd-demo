@@ -11,10 +11,9 @@ on:
       - '.github/**'
       - 'README.md'
 
-
 jobs:
   development_branch_info:
-    if: github.ref == 'refs/heads/development'
+    if: ${{ !startsWith(github.ref, 'refs/heads/release/') }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
