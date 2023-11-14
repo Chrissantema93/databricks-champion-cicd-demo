@@ -1,11 +1,11 @@
-name: Branch Information
+name: Run Unit Tests in Databricks Workflows
 
 on:
-
   workflow_dispatch:
   push:
     branches-ignore:
       - 'main'
+      - 'release/*'
     paths-ignore:
       - 'terraform/**'
       - '.github/**'
@@ -13,7 +13,6 @@ on:
 
 jobs:
   development_branch_info:
-    if: ${{ !startsWith(github.ref, 'refs/heads/release/') }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -36,15 +35,3 @@ jobs:
       - name: Echo Development Branch Name
         run: |
           echo "Development Branch Pushed: ${GITHUB_REF#refs/heads/}"
-
-  release_branch_info:
-    if: startsWith(github.ref, 'refs/heads/release/')
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v3
-
-      - name: Echo Release Branch Name and Current Time
-        run: |
-          echo "Release Branch Pushed: ${{ github.ref_name }}"
-          echo "Current Time: $(date -u)"
