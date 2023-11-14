@@ -1,6 +1,7 @@
 name: Branch Information
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - 'development'
