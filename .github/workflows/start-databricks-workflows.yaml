@@ -31,7 +31,7 @@ jobs:
           job_id=${{vars.JOB_ID}}
           git_provider="github"
           # Replace 'JOB_ID' with the actual Job ID and ensure the JSON is correctly formatted for your job
-          job_update_json="{\"job_id\": $job_id, \"new_settings\": {\"git_source\": {\"git_provider\" : \"$git_provider\", \"git_url\": \"$repo_url\", \"branch\": \"$branch_name\"}}}"
+          job_update_json="{\"job_id\": $job_id, \"new_settings\": {\"git_source\": {\"git_provider\" : \"$git_provider\", \"git_url\": \"$repo_url\", \"git_branch\": \"$branch_name\"}}}"
           databricks jobs update --json "$job_update_json"
 
       - name: Echo Development Branch Name
