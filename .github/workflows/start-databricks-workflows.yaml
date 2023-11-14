@@ -19,15 +19,14 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
 
-      - name: install-databricks-cli
-        uses: microsoft/install-databricks-cli@v2.1.0
+      # - name: install-databricks-cli
+      #   uses: microsoft/install-databricks-cli@v2.1.0
     
       - name: update Databricks Job
         env:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_PAT }}
         run: |
-          echo "Patching Databricks Job..."
           branch_name=${GITHUB_REF#refs/heads/}
           job_id=${{vars.JOB_ID}}
           # Replace 'JOB_ID' with the actual Job ID and ensure the JSON is correctly formatted for your job
