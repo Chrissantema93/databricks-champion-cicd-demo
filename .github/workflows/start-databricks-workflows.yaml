@@ -4,9 +4,8 @@ on:
 
   workflow_dispatch:
   push:
-    branches:
-      - 'development'
-      - 'release/*'
+    branches-ignore:
+      - 'main'
     paths-ignore:
       - 'terraform/**'
       - '.github/**'
