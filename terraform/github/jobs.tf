@@ -15,7 +15,7 @@ resource "databricks_job" "test" {
     task {
         task_key = "unit_tests"
     notebook_task {
-      notebook_path = "${databricks_repo.databricks_champion_repo.path}/tests/unit-notebooks/test_column_helpers.py"
+      notebook_path = "tests/unit-notebooks/test_column_helpers.py"
     }
     existing_cluster_id = databricks_cluster.dlt_files_in_repos_testing.id
     }

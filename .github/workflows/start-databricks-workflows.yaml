@@ -1,6 +1,7 @@
 name: Branch Information
 
 on:
+
   workflow_dispatch:
   push:
     branches:
@@ -10,6 +11,7 @@ on:
       - 'terraform/**'
       - '.github/**'
       - 'README.md'
+
 
 jobs:
   development_branch_info:
@@ -26,15 +28,18 @@ jobs:
         run: |
           pip install --upgrade databricks-cli
 
-      - name: Patch Databricks Job
+      - name: update Databricks Job
         run: |
           echo "Patching Databricks Job..."
-          # Replace 'JOB_ID' with actual Job ID and 'PATCH_CONTENT' with the actual patch content
-          databricks jobs patch --job-id JOB_ID --json-file PATCH_CONTENT
+          branch_name=${GITHUB_REF#refs/heads/}
+          job_id=${{vars.JOB_ID}}
+          # Replace 'JOB_ID' with the actual Job ID and ensure the JSON is correctly formatted for your job
+          job_update_json="{\"job_id\": $job_id, \"new_settings\": {\"git_source\": { \"branch\": \"$branch_name\"}}}"
+          databricks jobs update --json "$job_update_json"
 
       - name: Echo Development Branch Name
         run: |
-          echo "Development Branch Pushed: ${{ github.ref_name }}"
+          echo "Development Branch Pushed: ${GITHUB_REF#refs/heads/}"
 
   release_branch_info:
     if: startsWith(github.ref, 'refs/heads/release/')
