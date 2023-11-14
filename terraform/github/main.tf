@@ -8,8 +8,8 @@ terraform {
   }
 }
 
-provider "databricks" {
-  host  = var.databricks_host
-  token = var.databricks_pat
-}
 
+provider "databricks" {
+  host  = var.databricks_host != "" ? var.databricks_host : null
+  token = var.databricks_pat != "" ? var.databricks_pat : null
+}
