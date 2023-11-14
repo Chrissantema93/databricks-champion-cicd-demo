@@ -1,0 +1,41 @@
+name: Run Unit Tests in Databricks Workflows
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "release/*"
+    paths-ignore:
+      - "terraform/**"
+      - ".github/**"
+      - "README.md"
+
+jobs:
+  development_branch_info:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: install-databricks-cli
+        uses: databricks/setup-cli@main
+
+      - name: update Databricks Job
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_PAT }}
+        run: |
+          branch_name=${{ github.ref_name }}
+          repo_url=${{vars.REPO_URL}}
+          unit_test_job_id=${{vars.UNIT_TEST_JOB_ID}}
+          integration_test_job_id=${{vars.INTEGRATION_TEST_JOB_ID}}
+          git_provider="github"
+         
+          unit_test_job_update_json="{\"job_id\": $unit_test_job_id, \"new_settings\": {\"git_source\": {\"git_provider\" : \"$git_provider\", \"git_url\": \"$repo_url\", \"git_branch\": \"$branch_name\"}}}"
+          databricks jobs update --json "$unit_test_job_update_json"
+          databricks jobs run-now $unit_test_job_id
+
+
+          integration_test_job_update_json="{\"job_id\": $integration_test_job_id, \"new_settings\": {\"git_source\": {\"git_provider\" : \"$git_provider\", \"git_url\": \"$repo_url\", \"git_branch\": \"$branch_name\"}}}"
+          databricks jobs update --json "$integration_test_job_update_json"
+          databricks jobs run-now $integration_test_job_id

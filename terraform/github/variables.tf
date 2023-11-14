@@ -10,6 +10,12 @@ variable "github_url" {
   sensitive   = true
 }
 
+variable "github_repo_name" {
+  description = "The GitHub repo name"
+  type        = string
+  sensitive   = true
+}
+
 variable "databricks_pat" {
   description = "The Databricks PAT"
   type        = string
