@@ -6,6 +6,10 @@ on:
     branches:
       - 'development'
       - 'release/*'
+    paths-ignore:
+      - 'terraform/**'
+      - '.github/**'
+      - 'README.md'
 
 jobs:
   development_branch_info:
@@ -14,6 +18,19 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v2
+
+      - name: Set up Databricks CLI
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_PAT }}
+        run: |
+          pip install --upgrade databricks-cli
+
+      - name: Patch Databricks Job
+        run: |
+          echo "Patching Databricks Job..."
+          # Replace 'JOB_ID' with actual Job ID and 'PATCH_CONTENT' with the actual patch content
+          databricks jobs patch --job-id JOB_ID --json-file PATCH_CONTENT
 
       - name: Echo Development Branch Name
         run: |
