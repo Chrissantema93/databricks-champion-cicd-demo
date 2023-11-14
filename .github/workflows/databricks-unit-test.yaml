@@ -28,7 +28,7 @@ jobs:
           branch_name=${{ github.ref_name }}
           repo_url=${{ vars.REPO_URL }}
           unit_test_job_id=${{ vars.UNIT_TEST_JOB_ID }}
-          existing_cluster_id=${{ vars.DATABRICKS.EXISTING_CLUSTER_ID }}
+          existing_cluster_id=${{ vars.DATABRICKS_EXISTING_CLUSTER_ID }}
           git_provider="github"
 
           tasks=()
