@@ -1,4 +1,4 @@
-name: Run Unit and Integration Tests in Databricks Workflows
+name: Run Integration Tests in Databricks Workflows
 
 on:
   workflow_dispatch:

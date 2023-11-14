@@ -26,8 +26,8 @@ jobs:
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_PAT }}
         run: |
           branch_name=${{ github.ref_name }}
-          repo_url=${{ secrets.REPO_URL }}
-          unit_test_job_id=${{ secrets.UNIT_TEST_JOB_ID }}
+          repo_url=${{ vars.REPO_URL }}
+          unit_test_job_id=${{ vars.UNIT_TEST_JOB_ID }}
           git_provider="github"
 
           tasks=()
