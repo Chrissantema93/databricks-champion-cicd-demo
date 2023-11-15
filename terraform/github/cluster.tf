@@ -6,6 +6,7 @@ data "databricks_spark_version" "latest_lts" {
   long_term_support = true
 }
 
+
 resource "databricks_cluster" "dlt_files_in_repos_testing" {
   cluster_name            = "DLT Files in Repos notebooks testing (${data.databricks_current_user.me.alphanumeric})"
   spark_version           = data.databricks_spark_version.latest_lts.id

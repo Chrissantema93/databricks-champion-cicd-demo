@@ -5,14 +5,13 @@ on:
   push:
     branches-ignore:
       - "main"
-      - "release/*"
     paths-ignore:
       - "terraform/**"
       - ".github/**"
       - "README.md"
 
 jobs:
-  development_branch_info:
+  update_databricks_job_and_run_unit_tests:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -27,10 +26,20 @@ jobs:
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_PAT }}
         run: |
           branch_name=${{ github.ref_name }}
-          repo_url=${{vars.REPO_URL}}
-          job_id=${{vars.JOB_ID}}
+          repo_url=${{ vars.REPO_URL }}
+          unit_test_job_id=${{ vars.UNIT_TEST_JOB_ID }}
+          existing_cluster_id=${{ vars.DATABRICKS_EXISTING_CLUSTER_ID }}
           git_provider="github"
-          # Replace 'JOB_ID' with the actual Job ID and ensure the JSON is correctly formatted for your job
-          job_update_json="{\"job_id\": $job_id, \"new_settings\": {\"git_source\": {\"git_provider\" : \"$git_provider\", \"git_url\": \"$repo_url\", \"git_branch\": \"$branch_name\"}}}"
-          databricks jobs update --json "$job_update_json"
-          databricks jobs run-now $job_id
+
+          tasks=()
+          for notebook in tests/unit-notebooks/*; do
+            notebook_path="tests/unit-notebooks/$(basename -s .py $notebook)"
+            task_key="unit_test_$(basename -s .py $notebook)"
+            tasks+=("{\"notebook_task\": {\"notebook_path\": \"$notebook_path\"}, \"task_key\": \"$task_key\", \"existing_cluster_id\": \"$existing_cluster_id\"}")
+          done
+
+          tasks_string=$(IFS=','; echo "${tasks[*]}")
+
+          job_reset_json="{\"job_id\": $unit_test_job_id, \"new_settings\": {\"name\": \"Unit Tests\", \"tasks\": [$tasks_string], \"git_source\": {\"git_provider\" : \"$git_provider\", \"git_url\": \"$repo_url\", \"git_branch\": \"$branch_name\"}}}"
+          databricks jobs reset --json "$job_reset_json"
+          databricks jobs run-now $unit_test_job_id

@@ -23,3 +23,12 @@ resource "github_actions_variable" "databricks_integration_test_job_id" {
     databricks_job.integration_test
   ]
 }
+
+resource "github_actions_variable" "databricks_existing_cluster_id" {
+  repository       = var.github_repo_name
+  variable_name    = "DATABRICKS_EXISTING_CLUSTER_ID"
+  value            = databricks_cluster.dlt_files_in_repos_testing.id
+  depends_on = [
+    databricks_cluster.dlt_files_in_repos_testing
+  ]
+}
