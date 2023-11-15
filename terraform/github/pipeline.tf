@@ -4,12 +4,12 @@ resource "databricks_pipeline" "databricks_champion_pipeline" {
 
 
   cluster {
-    label = "default"
-    node_type_id = "Standard_DS3_v2"
-    autoscale {
-      min_workers = 0
-      max_workers = 1
-      mode = "ENHANCED"
+
+    num_workers = 1
+    spark_conf = {
+      # Single-node
+      "spark.databricks.cluster.profile" : "singleNode"
+      "spark.master" : "local[*]"
     }
   }
   library {
@@ -27,15 +27,18 @@ resource "databricks_pipeline" "databricks_champion_pipeline_test" {
   storage = "/test/first-pipeline"
 
   cluster {
-    label = "default"
-    node_type_id = "Standard_DS3_v2"
-    autoscale {
-      min_workers = 0
-      max_workers = 1
-      mode = "ENHANCED"
+    num_workers = 1
+    spark_conf = {
+      # Single-node
+      "spark.databricks.cluster.profile" : "singleNode"
+      "spark.master" : "local[*]"
     }
   }
-
+  library {
+    notebook {
+      path = "${databricks_repo.databricks_champion_repo.path}/pipelines/DLT-Pipeline"
+    }
+  }
   library {
     notebook {
       path = "${databricks_repo.databricks_champion_repo.path}/tests/integration/DLT-Pipeline-Test"
