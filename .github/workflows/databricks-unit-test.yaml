@@ -30,18 +30,8 @@ jobs:
           echo "EXISTING_CLUSTER_ID=${{ vars.DATABRICKS_EXISTING_CLUSTER_ID }}" >> $GITHUB_ENV
           echo "GIT_PROVIDER=github" >> $GITHUB_ENV
 
-      - name: Check for changes in notebooks
-        run: |
-          changed_files=$(git diff --name-only HEAD~1 HEAD)
-          if echo "$changed_files" | grep -q "tests/unit-notebooks/"; then
-            echo "NOTEBOOKS_CHANGED=true" >> $GITHUB_ENV
-          else
-            echo "NOTEBOOKS_CHANGED=false" >> $GITHUB_ENV
-          fi
-
       - name: Prepare Tasks
         run: |
-          if [ "$NOTEBOOKS_CHANGED" = "true" ]; then
             tasks=()
             for notebook in tests/unit-notebooks/*; do
               notebook_path="tests/unit-notebooks/$(basename -s .py $notebook)"
@@ -49,11 +39,12 @@ jobs:
               tasks+=("{\"notebook_task\": {\"notebook_path\": \"$notebook_path\"}, \"task_key\": \"$task_key\", \"existing_cluster_id\": \"$EXISTING_CLUSTER_ID\"}")
             done
             echo "TASKS_STRING=$(IFS=','; echo "${tasks[*]}")" >> $GITHUB_ENV
-          fi
 
       - name: Reset Job
         run: |
-          if [ "$NOTEBOOKS_CHANGED" = "true" ]; then
             job_reset_json="{\"job_id\": $UNIT_TEST_JOB_ID, \"new_settings\": {\"name\": \"Unit Tests\", \"tasks\": [$TASKS_STRING], \"git_source\": {\"git_provider\" : \"$GIT_PROVIDER\", \"git_url\": \"$REPO_URL\", \"git_commit\": \"$COMMIT_SHA\"}}}"
             databricks jobs reset --json "$job_reset_json"
-          fi
+
+      - name: Run unit Tests
+        run: | 
+            databricks jobs run-now $UNIT_TEST_JOB_ID

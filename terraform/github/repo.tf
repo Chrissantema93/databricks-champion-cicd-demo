@@ -35,6 +35,14 @@ resource "databricks_repo" "databricks_champion_repo_prod" {
 }
 
 
+resource "github_actions_variable" "databricks_dev_repo_path" {
+  repository       = var.github_repo_name
+  variable_name    = "DATABRICKS_DEV_REPO_NAME"
+  value            = databricks_repo.databricks_champion_repo_dev.path
+}
+
+
+
 resource "github_actions_variable" "databricks_unit_test_job_id" {
   repository       = var.github_repo_name
   variable_name    = "UNIT_TEST_JOB_ID"
