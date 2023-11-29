@@ -34,8 +34,8 @@ jobs:
       - name: Prepare Tasks
         run: |
             tasks=()
-            for notebook in tests/integration-notebooks/*; do
-              notebook_path="tests/integration-notebooks/$(basename -s .py $notebook)"
+            for notebook in tests/*; do
+              notebook_path="tests/notebooks/$(basename -s .py $notebook)"
               task_key="integration_test_$(basename -s .py $notebook)"
               tasks+=("{\"notebook_task\": {\"notebook_path\": \"$notebook_path\"}, \"task_key\": \"$task_key\", \"existing_cluster_id\": \"$EXISTING_CLUSTER_ID\"}")
             done
