@@ -44,9 +44,11 @@ class TestFixtureColumnHelpers(NutterFixture):
 
 result = TestFixtureColumnHelpers().execute_tests()
 print(result.to_string())
-is_job = dbutils.notebook.entry_point.getDbutils().notebook().getContext().currentRunId().isDefined()
-if is_job:
-  result.exit(dbutils)
+if result.errors:
+    dbutils.notebook.exit(' - ERROR!!! - ')
+# is_job = dbutils.notebook.entry_point.getDbutils().notebook().getContext().currentRunId().isDefined()
+# if is_job:
+#   result.exit(dbutils)
 
 # COMMAND ----------
 

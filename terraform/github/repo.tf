@@ -1,9 +1,47 @@
 data "databricks_current_user" "me" {
 }
 
-resource "databricks_repo" "databricks_champion_repo" {
+resource "databricks_repo" "databricks_champion_repo_dev" {
     url    = var.github_url
+    branch = "development"
+    path       = "${data.databricks_current_user.me.repos}/databricks-champions-repo-dev"
+    lifecycle {
+    ignore_changes = [
+      branch,
+    ]
+  }
 }
+
+resource "databricks_repo" "databricks_champion_repo_qa" {
+    url    = var.github_url
+    branch = "main"
+    path       = "${data.databricks_current_user.me.repos}/databricks-champions-repo-qa"
+    lifecycle {
+    ignore_changes = [
+      branch,
+    ]
+  }
+}
+
+resource "databricks_repo" "databricks_champion_repo_prod" {
+    url    = var.github_url
+    branch = "main"
+    path       = "${data.databricks_current_user.me.repos}/databricks-champions-repo-prod"
+    lifecycle {
+    ignore_changes = [
+      branch,
+    ]
+  }
+}
+
+
+resource "github_actions_variable" "databricks_dev_repo_path" {
+  repository       = var.github_repo_name
+  variable_name    = "DATABRICKS_DEV_REPO_NAME"
+  value            = databricks_repo.databricks_champion_repo_dev.path
+}
+
+
 
 resource "github_actions_variable" "databricks_unit_test_job_id" {
   repository       = var.github_repo_name

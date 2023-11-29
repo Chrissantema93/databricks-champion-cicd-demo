@@ -14,7 +14,7 @@ resource "databricks_pipeline" "databricks_champion_pipeline" {
   }
   library {
     notebook {
-      path = "${databricks_repo.databricks_champion_repo.path}/pipelines/DLT-Pipeline"
+      path = "${databricks_repo.databricks_champion_repo_prod.path}/pipelines/DLT_pipeline"
     }
   }
   continuous = false
@@ -36,12 +36,12 @@ resource "databricks_pipeline" "databricks_champion_pipeline_test" {
   }
   library {
     notebook {
-      path = "${databricks_repo.databricks_champion_repo.path}/pipelines/DLT-Pipeline"
+      path = "${databricks_repo.databricks_champion_repo_prod.path}/pipelines/DLT_pipeline"
     }
   }
   library {
     notebook {
-      path = "${databricks_repo.databricks_champion_repo.path}/tests/integration/DLT-Pipeline-Test"
+      path = "${databricks_repo.databricks_champion_repo_prod.path}/tests/integration/DLT_pipeline_test"
     }
   }
   continuous = false

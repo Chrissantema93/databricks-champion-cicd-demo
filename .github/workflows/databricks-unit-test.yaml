@@ -3,8 +3,6 @@ name: Run Unit Tests in Databricks Workflows
 on:
   workflow_dispatch:
   push:
-    branches-ignore:
-      - "main"
     paths-ignore:
       - "terraform/**"
       - ".github/**"
@@ -20,26 +18,33 @@ jobs:
       - name: install-databricks-cli
         uses: databricks/setup-cli@main
 
-      - name: update Databricks Job
+      - name: Set Variables
         env:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_PAT }}
         run: |
-          branch_name=${{ github.ref_name }}
-          repo_url=${{ vars.REPO_URL }}
-          unit_test_job_id=${{ vars.UNIT_TEST_JOB_ID }}
-          existing_cluster_id=${{ vars.DATABRICKS_EXISTING_CLUSTER_ID }}
-          git_provider="github"
+          echo "BRANCH_NAME=${{ github.ref_name }}" >> $GITHUB_ENV
+          echo "REPO_URL=${{ vars.REPO_URL }}" >> $GITHUB_ENV
+          echo "UNIT_TEST_JOB_ID=${{ vars.UNIT_TEST_JOB_ID }}" >> $GITHUB_ENV
+          echo "COMMIT_SHA=${{ github.sha }}" >> $GITHUB_ENV
+          echo "EXISTING_CLUSTER_ID=${{ vars.DATABRICKS_EXISTING_CLUSTER_ID }}" >> $GITHUB_ENV
+          echo "GIT_PROVIDER=github" >> $GITHUB_ENV
 
-          tasks=()
-          for notebook in tests/unit-notebooks/*; do
-            notebook_path="tests/unit-notebooks/$(basename -s .py $notebook)"
-            task_key="unit_test_$(basename -s .py $notebook)"
-            tasks+=("{\"notebook_task\": {\"notebook_path\": \"$notebook_path\"}, \"task_key\": \"$task_key\", \"existing_cluster_id\": \"$existing_cluster_id\"}")
-          done
+      - name: Prepare Tasks
+        run: |
+            tasks=()
+            for notebook in tests/unit-notebooks/*; do
+              notebook_path="tests/unit-notebooks/$(basename -s .py $notebook)"
+              task_key="unit_test_$(basename -s .py $notebook)"
+              tasks+=("{\"notebook_task\": {\"notebook_path\": \"$notebook_path\"}, \"task_key\": \"$task_key\", \"existing_cluster_id\": \"$EXISTING_CLUSTER_ID\"}")
+            done
+            echo "TASKS_STRING=$(IFS=','; echo "${tasks[*]}")" >> $GITHUB_ENV
 
-          tasks_string=$(IFS=','; echo "${tasks[*]}")
+      - name: Reset Job
+        run: |
+            job_reset_json="{\"job_id\": $UNIT_TEST_JOB_ID, \"new_settings\": {\"name\": \"Unit Tests\", \"tasks\": [$TASKS_STRING], \"git_source\": {\"git_provider\" : \"$GIT_PROVIDER\", \"git_url\": \"$REPO_URL\", \"git_commit\": \"$COMMIT_SHA\"}}}"
+            databricks jobs reset --json "$job_reset_json"
 
-          job_reset_json="{\"job_id\": $unit_test_job_id, \"new_settings\": {\"name\": \"Unit Tests\", \"tasks\": [$tasks_string], \"git_source\": {\"git_provider\" : \"$git_provider\", \"git_url\": \"$repo_url\", \"git_branch\": \"$branch_name\"}}}"
-          databricks jobs reset --json "$job_reset_json"
-          databricks jobs run-now $unit_test_job_id
+      - name: Run unit Tests
+        run: | 
+            databricks jobs run-now $UNIT_TEST_JOB_ID
