@@ -2,13 +2,10 @@ name: Run Integration Tests in Databricks Workflows
 
 on:
   workflow_dispatch:
-  push:
+  pull_request:
     branches:
-      - "release/*"
-    paths-ignore:
-      - "terraform/**"
-      - ".github/**"
-      - "README.md"
+      - "development"
+      - "main"
 
 jobs:
   update_databricks_job_and_run_unit_and_integration_tests:
