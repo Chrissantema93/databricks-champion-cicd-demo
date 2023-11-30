@@ -1,0 +1,34 @@
+name: Run on PR Merge 
+
+on:
+  pull_request:
+    branches:
+      - development
+      - releases/*
+    types:
+      - closed
+
+jobs:
+  build:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    env:
+        DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+        DATABRICKS_PAT: ${{ secrets.DATABRICKS_PAT }}
+        DATABRICKS_DEV_REPO_NAME: ${{ vars.DATABRICKS_DEV_REPO_NAME }}
+        DATABRICKS_QA_REPO_NAME: ${{ vars.DATABRICKS_QA_REPO_NAME }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Add any additional steps you want to run here
+      - name: Update Development repo
+        
+        run: |
+          BRANCH_NAME=${{ github.event.pull_request.base.ref }}
+           if [[ "$BRANCH_NAME" == releases/* ]]; then
+            REPO_NAME=$DATABRICKS_QA_REPO_NAME
+          else
+            REPO_NAME=$DATABRICKS_DEV_REPO_NAME
+          fi
+          databricks repos update --path "$REPO_NAME" --branch "$BRANCH_NAME"
