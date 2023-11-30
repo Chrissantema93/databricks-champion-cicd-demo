@@ -9,6 +9,9 @@
 
 # MAGIC %run ../Code2
 
+from notebooks.code1 import * # instead of %run ./Code1
+from notebooks.code2 import * # instead of %run ./Code2
+
 # COMMAND ----------
 
 # https://github.com/microsoft/nutter
