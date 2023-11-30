@@ -33,4 +33,4 @@ jobs:
           else
             REPO_NAME=$DATABRICKS_DEV_REPO_NAME
           fi
-          databricks repos update --branch "$BRANCH_NAME"
+          databricks repos update --repo_id "$REPO_NAME" --branch "$BRANCH_NAME"
