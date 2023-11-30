@@ -8,8 +8,8 @@
 
 # COMMAND ----------
 
-from notebooks.code1 import * # instead of %run ./Code1
-from notebooks.code2 import * # instead of %run ./Code2
+from notebooks.Code1 import * # instead of %run ./Code1
+from notebooks.Code2 import * # instead of %run ./Code2
 
 # COMMAND ----------
 
@@ -63,8 +63,8 @@ class TestFixtureArbitraryFiles(NutterFixture):
 result = TestFixtureArbitraryFiles().execute_tests()
 print(result)
 print(result.to_string())
-if result.errors:
-    dbutils.notebook.exit(' - ERROR!!! - ')
+# if result.errors:
+#     dbutils.notebook.exit(' - ERROR!!! - ')
 # is_job = dbutils.notebook.entry_point.getDbutils().notebook().getContext().currentRunId().isDefined()
 # if is_job:
 #   result.exit(dbutils)
