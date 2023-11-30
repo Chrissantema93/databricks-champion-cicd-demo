@@ -21,9 +21,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: install-databricks-cli
+        uses: databricks/setup-cli@main
+
       # Add any additional steps you want to run here
       - name: Update Development repo
-        
         run: |
           BRANCH_NAME=${{ github.event.pull_request.base.ref }}
            if [[ "$BRANCH_NAME" == releases/* ]]; then

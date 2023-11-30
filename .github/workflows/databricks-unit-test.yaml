@@ -16,14 +16,14 @@ jobs:
   update_databricks_job_and_run_unit_tests:
     runs-on: ubuntu-latest
     env:
-          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
-          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_PAT }}
-          BRANCH_NAME: ${{ github.ref_name }}
-          REPO_URL: ${{ vars.REPO_URL }}
-          UNIT_TEST_JOB_ID: ${{ vars.UNIT_TEST_JOB_ID }}
-          COMMIT_SHA: ${{ github.sha }}
-          EXISTING_CLUSTER_ID: ${{ vars.DATABRICKS_EXISTING_CLUSTER_ID }}
-          GIT_PROVIDER: github
+        DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+        DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_PAT }}
+        BRANCH_NAME: ${{ github.ref_name }}
+        REPO_URL: ${{ vars.REPO_URL }}
+        UNIT_TEST_JOB_ID: ${{ vars.UNIT_TEST_JOB_ID }}
+        COMMIT_SHA: ${{ github.sha }}
+        EXISTING_CLUSTER_ID: ${{ vars.DATABRICKS_EXISTING_CLUSTER_ID }}
+        GIT_PROVIDER: github
     steps:
       - name: Check out code
         uses: actions/checkout@v3
