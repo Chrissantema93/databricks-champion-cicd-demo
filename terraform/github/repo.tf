@@ -40,6 +40,16 @@ resource "github_actions_variable" "databricks_dev_repo_path" {
   variable_name    = "DATABRICKS_DEV_REPO_NAME"
   value            = databricks_repo.databricks_champion_repo_dev.path
 }
+resource "github_actions_variable" "databricks_qa_repo_path" {
+  repository       = var.github_repo_name
+  variable_name    = "DATABRICKS_QA_REPO_NAME"
+  value            = databricks_repo.databricks_champion_repo_qa.path
+}
+resource "github_actions_variable" "databricks_prod_repo_path" {
+  repository       = var.github_repo_name
+  variable_name    = "DATABRICKS_PROD_REPO_NAME"
+  value            = databricks_repo.databricks_champion_repo_prod.path
+}
 
 
 
