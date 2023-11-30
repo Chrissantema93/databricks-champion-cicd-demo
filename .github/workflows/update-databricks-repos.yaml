@@ -14,12 +14,12 @@ jobs:
     runs-on: ubuntu-latest
     env:
         DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
-        DATABRICKS_PAT: ${{ secrets.DATABRICKS_PAT }}
+        DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_PAT }}
         DATABRICKS_DEV_REPO_NAME: ${{ vars.DATABRICKS_DEV_REPO_NAME }}
         DATABRICKS_QA_REPO_NAME: ${{ vars.DATABRICKS_QA_REPO_NAME }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Check out code
+        uses: actions/checkout@v3
 
       - name: install-databricks-cli
         uses: databricks/setup-cli@main
