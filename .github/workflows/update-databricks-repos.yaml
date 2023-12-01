@@ -1,4 +1,4 @@
-name: Run on PR Merge 
+name: Update Databricks Repos
 
 on:
   pull_request:
@@ -9,7 +9,7 @@ on:
       - closed
 
 jobs:
-  build:
+  update_databricks_repos:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     env:
