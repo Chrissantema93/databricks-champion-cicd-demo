@@ -38,17 +38,17 @@ resource "databricks_repo" "databricks_champion_repo_prod" {
 resource "github_actions_variable" "databricks_dev_repo_path" {
   repository       = var.github_repo_name
   variable_name    = "DATABRICKS_DEV_REPO_NAME"
-  value            = databricks_repo.databricks_champion_repo_dev.path
+  value            = databricks_repo.databricks_champion_repo_dev.id
 }
 resource "github_actions_variable" "databricks_qa_repo_path" {
   repository       = var.github_repo_name
   variable_name    = "DATABRICKS_QA_REPO_NAME"
-  value            = databricks_repo.databricks_champion_repo_qa.path
+  value            = databricks_repo.databricks_champion_repo_qa.id
 }
 resource "github_actions_variable" "databricks_prod_repo_path" {
   repository       = var.github_repo_name
   variable_name    = "DATABRICKS_PROD_REPO_NAME"
-  value            = databricks_repo.databricks_champion_repo_prod.path
+  value            = databricks_repo.databricks_champion_repo_prod.id
 }
 
 

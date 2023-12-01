@@ -14,16 +14,18 @@ jobs:
     runs-on: ubuntu-latest
     env:
         DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
-        DATABRICKS_PAT: ${{ secrets.DATABRICKS_PAT }}
+        DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_PAT }}
         DATABRICKS_DEV_REPO_NAME: ${{ vars.DATABRICKS_DEV_REPO_NAME }}
         DATABRICKS_QA_REPO_NAME: ${{ vars.DATABRICKS_QA_REPO_NAME }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: install-databricks-cli
+        uses: databricks/setup-cli@main
 
       # Add any additional steps you want to run here
       - name: Update Development repo
-        
         run: |
           BRANCH_NAME=${{ github.event.pull_request.base.ref }}
            if [[ "$BRANCH_NAME" == releases/* ]]; then
@@ -31,4 +33,4 @@ jobs:
           else
             REPO_NAME=$DATABRICKS_DEV_REPO_NAME
           fi
-          databricks repos update --path "$REPO_NAME" --branch "$BRANCH_NAME"
+          databricks repos update "$REPO_NAME" --branch "$BRANCH_NAME"

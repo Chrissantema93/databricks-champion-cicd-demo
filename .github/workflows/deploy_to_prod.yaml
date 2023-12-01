@@ -1,0 +1,29 @@
+name: Manual Databricks Deploy
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to deploy'
+        required: true
+        default: 'main'
+
+jobs:
+  build:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    env:
+        DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+        DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_PAT }}
+        DATABRICKS_PROD_REPO_NAME: ${{ vars.DATABRICKS_PROD_REPO_NAME }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: install-databricks-cli
+        uses: databricks/setup-cli@main
+
+      # Add any additional steps you want to run here
+      - name: Deploy to Prod
+        run: |
+          BRANCH_NAME=${{ github.event.inputs.branch }}
+          databricks repos update "$DATABRICKS_REPO_NAME" --branch "$BRANCH_NAME"

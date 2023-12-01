@@ -13,12 +13,10 @@ resource "databricks_job" "unit_test" {
     notebook_task {
       notebook_path = "tests/unit-notebooks/test_column_helpers.py"
     }
-    new_cluster {
-      spark_version = data.databricks_spark_version.latest_lts.id
-      node_type_id  = "Standard_DS3_v2"
-      num_workers   = 1
-    }
+    existing_cluster_id = databricks_cluster.dlt_files_in_repos_testing.id
   }
+  
+  
 }
 
 resource "databricks_job" "integration_test" {

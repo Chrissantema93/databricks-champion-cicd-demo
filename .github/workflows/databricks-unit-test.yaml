@@ -16,14 +16,14 @@ jobs:
   update_databricks_job_and_run_unit_tests:
     runs-on: ubuntu-latest
     env:
-          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
-          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_PAT }}
-          BRANCH_NAME: ${{ github.ref_name }}
-          REPO_URL: ${{ vars.REPO_URL }}
-          UNIT_TEST_JOB_ID: ${{ vars.UNIT_TEST_JOB_ID }}
-          COMMIT_SHA: ${{ github.sha }}
-          EXISTING_CLUSTER_ID: ${{ vars.DATABRICKS_EXISTING_CLUSTER_ID }}
-          GIT_PROVIDER: github
+        DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+        DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_PAT }}
+        BRANCH_NAME: ${{ github.ref_name }}
+        REPO_URL: ${{ vars.REPO_URL }}
+        UNIT_TEST_JOB_ID: ${{ vars.UNIT_TEST_JOB_ID }}
+        COMMIT_SHA: ${{ github.sha }}
+        EXISTING_CLUSTER_ID: ${{ vars.DATABRICKS_EXISTING_CLUSTER_ID }}
+        GIT_PROVIDER: github
     steps:
       - name: Check out code
         uses: actions/checkout@v3
@@ -36,7 +36,7 @@ jobs:
             tasks=()
             for notebook in tests/unit/*; do
               notebook_path="tests/unit/$(basename -s .py $notebook)"
-              task_key="unit_test_$(basename -s .py $notebook)"
+              task_key="unit_$(basename -s .py $notebook)"
               tasks+=("{\"notebook_task\": {\"notebook_path\": \"$notebook_path\"}, \"task_key\": \"$task_key\", \"existing_cluster_id\": \"$EXISTING_CLUSTER_ID\"}")
             done
             echo "TASKS_STRING=$(IFS=','; echo "${tasks[*]}")" >> $GITHUB_ENV
