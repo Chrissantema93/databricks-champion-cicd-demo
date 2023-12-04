@@ -31,9 +31,11 @@ jobs:
         run: |
             tasks=()
             for notebook in tests/integration/*; do
-              notebook_path="tests/integration/$(basename -s .py $notebook)"
-              task_key="integration_$(basename -s .py $notebook)"
-              tasks+=("{\"notebook_task\": {\"notebook_path\": \"$notebook_path\"}, \"task_key\": \"$task_key\", \"existing_cluster_id\": \"$EXISTING_CLUSTER_ID\"}")
+              if [ -f "$notebook" ]; then
+                notebook_path="tests/integration/$(basename -s .py $notebook)"
+                task_key="integration_$(basename -s .py $notebook)"
+                tasks+=("{\"notebook_task\": {\"notebook_path\": \"$notebook_path\"}, \"task_key\": \"$task_key\", \"existing_cluster_id\": \"$EXISTING_CLUSTER_ID\"}")
+              fi
             done
             echo "TASKS_STRING=$(IFS=','; echo "${tasks[*]}")" >> $GITHUB_ENV
 
