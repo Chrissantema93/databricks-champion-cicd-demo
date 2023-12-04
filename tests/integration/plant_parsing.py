@@ -38,9 +38,9 @@ class TestXmlToDataFrame(NutterFixture):
         assert self.filtered_df.filter(col("PRICE_PARSED") < 0).count() == 0, "Negative prices found in the DataFrame"
         assert "PRICE" not in self.filtered_df.columns, "PRICE column was not removed successfully"
         assert "AVAILABILITY" not in self.filtered_df.columns, "AVAILABILITY column was not removed successfully"
-        
+
 # COMMAND ----------
 
 # Run the test
 result = TestXmlToDataFrame().execute_tests()
-print(result.to_string())
+print(result)
