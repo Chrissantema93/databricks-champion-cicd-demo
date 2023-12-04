@@ -5,8 +5,6 @@ from runtime.nutterfixture import NutterFixture, tag
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import udf, col
 from pyspark.sql.types import IntegerType
-import xml.etree.ElementTree as ET
-
 
 # COMMAND ----------
 from helpers.plants_helpers import parse_price
@@ -18,7 +16,7 @@ class TestXmlToDataFrame(NutterFixture):
         # Initialize Spark session
         spark = SparkSession.builder.appName("IntegrationTest").getOrCreate()
 
-        xml_file_path = "/FileStore/tables/plants.xml" 
+        xml_file_path = "./resources/plants.xml" 
 
         xml_query = f"""
             CREATE TEMPORARY VIEW plants
@@ -27,7 +25,7 @@ class TestXmlToDataFrame(NutterFixture):
 
         # Read the XML file
         self.df = spark.sql(xml_query)
-        print(self.df)
+
         # Register UDF to apply parse_price function
         parse_price_udf = udf(parse_price, IntegerType())
         parsed_df = self.df.withColumn("PRICE_PARSED", parse_price_udf(col("PRICE")))
