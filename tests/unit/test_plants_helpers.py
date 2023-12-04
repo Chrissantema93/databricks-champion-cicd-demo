@@ -46,4 +46,7 @@ class TestPriceParser(NutterFixture):
 # COMMAND ----------
 
 result = TestPriceParser().execute_tests()
-print(result.to_string())
+result_string = result.to_string()    
+print(result_string)
+if "FAILING TESTS" in result_string:
+    raise Exception("Some tests failed")
