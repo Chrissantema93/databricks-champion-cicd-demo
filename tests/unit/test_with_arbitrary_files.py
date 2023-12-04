@@ -61,7 +61,10 @@ class TestFixtureArbitraryFiles(NutterFixture):
 # COMMAND ----------
 
 result = TestFixtureArbitraryFiles().execute_tests()
-print(result.to_string())
+result_string = result.to_string()    
+print(result_string)
+if "FAILING TESTS" in result_string:
+    raise Exception("Some tests failed")
 # if result.errors:
 #     dbutils.notebook.exit(' - ERROR!!! - ')
 # is_job = dbutils.notebook.entry_point.getDbutils().notebook().getContext().currentRunId().isDefined()
