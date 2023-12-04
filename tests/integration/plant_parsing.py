@@ -27,7 +27,7 @@ class TestXmlToDataFrame(NutterFixture):
 
         # Read the XML file
         self.df = spark.sql(xml_query)
-
+        display(self.df)
         # Register UDF to apply parse_price function
         parse_price_udf = udf(parse_price, IntegerType())
         parsed_df = self.df.withColumn("PRICE_PARSED", parse_price_udf(col("PRICE")))
