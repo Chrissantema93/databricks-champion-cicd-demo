@@ -16,7 +16,7 @@ class TestXmlToDataFrame(NutterFixture):
         # Initialize Spark session
         spark = SparkSession.builder.appName("IntegrationTest").getOrCreate()
 
-        xml_file_path = "resources/plants.xml" 
+        xml_file_path = "dbfs:/FileStore/shared_uploads/chris.santema@devoteam.com/plants.xml" 
 
         xml_query = f"""
             CREATE TEMPORARY VIEW plants
