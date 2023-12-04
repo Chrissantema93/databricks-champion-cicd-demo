@@ -25,7 +25,7 @@ class TestParsePrice(NutterFixture):
             parse_price("")
             assert False, "ValueError not raised for empty string"
         except ValueError:
-            assert True
+            assert True, "ValueError raised for empty string"
 
     def run_test_invalid_format(self):
         # Test with an invalid format (should raise ValueError)
@@ -33,7 +33,7 @@ class TestParsePrice(NutterFixture):
             parse_price("invalid")
             assert False, "ValueError not raised for invalid format"
         except ValueError:
-            assert True
+            assert True, "ValueError raised for invalid format"
 
     def run_test_no_digits(self):
         # Test with a string that doesn't contain digits (should raise ValueError)

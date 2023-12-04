@@ -8,8 +8,8 @@
 
 # COMMAND ----------
 
-from notebooks.code1 import * # instead of %run ./Code1
-from notebooks.code2 import * # instead of %run ./Code2
+from helpers.code1 import * # instead of %run ./Code1
+from helpers.code2 import * # instead of %run ./Code2
 
 # COMMAND ----------
 
