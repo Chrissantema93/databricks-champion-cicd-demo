@@ -16,15 +16,9 @@ class TestXmlToDataFrame(NutterFixture):
         # Initialize Spark session
         spark = SparkSession.builder.appName("IntegrationTest").getOrCreate()
 
-        xml_file_path = "./resources/plants.xml" 
+        xml_file_path = "/FileStore/shared_uploads/chris.santema@devoteam.com/plants.xml" 
 
-        xml_query = f"""
-            CREATE TEMPORARY VIEW plants
-            USING xml
-            OPTIONS (path "{xml_file_path}", rowTag "plant")"""
-
-        # Read the XML file
-        self.df = spark.sql(xml_query)
+        self.df = spark.read.format('xml').option("rootTag", "CATALOG").option("rowTag","PLANT").load(xml_file_path)
 
         # Register UDF to apply parse_price function
         parse_price_udf = udf(parse_price, IntegerType())
