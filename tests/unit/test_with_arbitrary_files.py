@@ -61,7 +61,6 @@ class TestFixtureArbitraryFiles(NutterFixture):
 # COMMAND ----------
 
 result = TestFixtureArbitraryFiles().execute_tests()
-print(result)
 print(result.to_string())
 # if result.errors:
 #     dbutils.notebook.exit(' - ERROR!!! - ')
