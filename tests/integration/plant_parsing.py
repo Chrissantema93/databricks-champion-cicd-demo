@@ -5,6 +5,7 @@ from pyspark.sql.types import IntegerType
 import xml.etree.ElementTree as ET
 
 from helpers.plants_helpers import parse_price
+from helpers.columns_helpers import *
 
 class TestXmlToDataFrame(NutterFixture):
     def run_test_conversion(self):
@@ -12,7 +13,7 @@ class TestXmlToDataFrame(NutterFixture):
         spark = SparkSession.builder.appName("IntegrationTest").getOrCreate()
 
         # Read the XML file
-        xml_file_path = "resources/plants.xml"  # Path to your XML file
+        xml_file_path = "/FileStore/tables/plants.xml"  # Path to your XML file
         tree = ET.parse(xml_file_path)
         root = tree.getroot()
 
