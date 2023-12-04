@@ -6,47 +6,44 @@ from helpers.plants_helpers import *
 
 # COMMAND ----------
 
-class TestParsePrice(NutterFixture):
-    def run_test_valid_price(self):
-        # Test with a valid price string
-        assert parse_price("$9.90") == 990
+class TestPriceParser(NutterFixture):
+    def __init__(self):
+        self.price_parser = parse_price
+        NutterFixture.__init__(self)
 
-    def run_test_negative_price(self):
-        # Test with a negative price (should raise ValueError)
+
+    def assertion_valid_price_string(self):
+        result = self.price_parser('$10.00')
+        assert result == 1000, f'Expected 1000, but got {result}'
+
+
+    def assertion_price_string_with_commas(self):
+        result = self.price_parser('$1,000.00')
+        assert result == 100000, f'Expected 100000, but got {result}'
+
+
+    def assertion_negative_price_string(self):
         try:
-            parse_price("-$9.90")
-            assert False, "ValueError not raised for negative price"
-        except ValueError:
-            assert True
+            self.price_parser('-$10.00')
+        except ValueError as ve:
+            assert str(ve) == 'Negative prices are not allowed'
 
-    def run_test_empty_string(self):
-        # Test with an empty string (should raise ValueError)
+
+    def assertion_invalid_price_string(self):
         try:
-            parse_price("")
-            assert False, "ValueError not raised for empty string"
-        except ValueError:
-            assert True, "ValueError raised for empty string"
+            self.price_parser('ten dollars')
+        except ValueError as ve:
+            assert str(ve) == 'Invalid price string'
 
-    def run_test_invalid_format(self):
-        # Test with an invalid format (should raise ValueError)
+
+    def assertion_empty_string(self):
         try:
-            parse_price("invalid")
-            assert False, "ValueError not raised for invalid format"
-        except ValueError:
-            assert True, "ValueError raised for invalid format"
+            self.price_parser('')
+        except ValueError as ve:
+            assert str(ve) == 'Invalid price string'
 
-    def run_test_no_digits(self):
-        # Test with a string that doesn't contain digits (should raise ValueError)
-        try:
-            parse_price("$abc.def")
-            assert False, "ValueError not raised for string without digits"
-        except ValueError:
-            assert True
 
-    def run_test_large_price(self):
-        # Test with a larger price
-        assert parse_price("$12,345.67") == 1234567
+# COMMAND ----------
 
-# Run the tests
-result = TestParsePrice().execute_tests()
+result = TestPriceParser().execute_tests()
 print(result.to_string())
